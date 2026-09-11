@@ -1,12 +1,14 @@
 # UWMS — Enterprise Workforce Management & Scheduling System
 
-> 複雑な勤務条件・必要人数・休暇・勤務希望を考慮し、勤務表の作成から確認・修正・公開までを支援するワークフォース管理システム。
+> 複雑な勤務条件・必要人数・休暇・勤務希望を考慮し、勤務表の作成から確認・修正・公開、Staff自身の勤務表確認までを支援するワークフォース管理システム。
 
 UWMS（Unified Workforce Management System）は、シフト勤務を行う組織向けに個人開発しているWebベースのワークフォース管理・勤務表作成システムです。
 
 介護現場での実務経験を主な出発点としていますが、介護専用にハードコードせず、医療・小売・宿泊・製造など複数のシフト型業務にも適用できる汎用的な設計を目指しています。
 
-> **Portfolio status:** 継続開発中です。現在のPublic Portfolio Release 1.0は準備中で、実装済み・検証済みの機能と今後の開発項目を明確に分けて掲載します。
+> **Portfolio status:** Portfolio Release 1.0のshowcase対象が揃いました。現在は実画面Screenshot・demo capture・security reviewを準備しています。
+
+[Portfolio Web Preview](docs/index.html) · [English](README_EN.md) · [Architecture](docs/architecture.md) · [Engineering Decisions](docs/engineering-decisions.md)
 
 ---
 
@@ -44,7 +46,7 @@ UWMSでは、必要人数を満たせないときにHARD制約を破って不足
 
 ---
 
-## Manager Workflow
+## End-to-End Workflow
 
 ```text
 Organization / Facility
@@ -68,6 +70,8 @@ Candidate Generation
 Candidate Review / Correction
         ↓
 Publish
+        ↓
+My Schedule
 ```
 
 ---
@@ -125,31 +129,16 @@ Coverageは「ぴったりの人数」ではなく**最低必要人数**とし�
 
 不足を隠すためにHARD制約を緩和するのではなく、Best Feasibleな結果と不足を可視化する方針です。
 
-### Candidate Review
+### Candidate Review / Correction
 Candidateを勤務表として確認し、人員不足・診断情報を確認したうえで、管理者が修正・判断できる運用UIを構築しています。
 
 ### Publication
 Candidateを正式な勤務表として公開します。公開履歴は単純上書きではなく、Revision / Publication lifecycleとして保持する設計です。
 
----
+### Staff Experience — My Schedule
+My ScheduleはPortfolio Release 1.0の正式なshowcase対象です。
 
-## Staff Experience — My Schedule
-
-My Scheduleは現在、Portfolio Release 1.0に向けて仕上げ中です。
-
-目標は、Staffが自分の**現在有効な公開済み勤務表**を分かりやすく確認できるstaff-first UIです。
-
-完成後、このPortfolioでは次を実画面で紹介します。
-
-- 月表示を中心としたMy Schedule
-- 週表示
-- 選択日の勤務詳細
-- 夜 → 明のcontinuation表示
-- 公休 / 有給 / 欠勤の区別
-- 勤務希望・休暇へのentry point
-- Staff向けutility / self-service導線
-
-未完成の機能は、完成するまで実装済みとしては表示しません。
+Portfolioでは、現在の実装そのものをcaptureし、Staffが公開済み勤務表を確認する体験と、その画面から利用できるutilityを紹介します。README上で未検証のsub-featureを追加して見せることはせず、実画面を証拠として掲載します。
 
 ---
 
@@ -227,14 +216,17 @@ CRUDだけでなく、次の設計課題にも取り組んでいます。
 
 Portfolio Release 1.0では、READMEだけではなく**実際のUIとutilityを短時間で理解できるデモ**を用意します。
 
-予定:
+Showcase target:
 
-1. Manager-side planning demo
-2. Candidate Review / shortage visualization
-3. Correction → Publication
-4. Staff-side My Schedule demo（完成後）
-5. Utility showcase
-6. Architecture / engineering decisions
+1. Planning Workspace
+2. 必要人数 / Scheduling Terms / 勤務希望・休暇
+3. Generation Readiness
+4. Candidate Generation
+5. Candidate Review
+6. 人員不足 / diagnostics
+7. Correction → Publication
+8. My Schedule
+9. My Scheduleから利用できるcurrent utility
 
 詳細: [demo/demo-scenario.md](demo/demo-scenario.md) / [docs/showcase-plan.md](docs/showcase-plan.md)
 
@@ -263,25 +255,20 @@ AI支援ツールも開発補助として利用していますが、業務要件
 
 ---
 
-## Current Status / Roadmap
+## Portfolio Release 1.0 Gate
 
-### 現在の主なFocus
-- Manager向け setup → planning → candidate → correction → publish
-- Candidate Review
-- Workforce / Scheduling Terms
-- 勤務希望・休暇
-- Publication lifecycle
-- **My Scheduleの仕上げ**
-
-### Portfolio Release 1.0 Gate
 - [x] GitHub staging repository
-- [x] Japanese README foundation
-- [ ] 5–7 anonymized screenshots
-- [ ] Manager demo recording
-- [ ] My Schedule completion
-- [ ] Staff-side demo recording
-- [ ] Utility showcase
-- [ ] security review
-- [ ] public release
+- [x] Japanese README
+- [x] English README
+- [x] Architecture / engineering story
+- [x] Portfolio web page foundation
+- [x] Manager-side showcase scope
+- [x] My Schedule showcase scope
+- [ ] 6–8 anonymized actual screenshots
+- [ ] Automated / repeatable demo capture
+- [ ] Short demo recording
+- [ ] Utility showcase based on current build
+- [ ] Security review
+- [ ] Public release
 
 Payrollは初期製品スコープには含めていません。
