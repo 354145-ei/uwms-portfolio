@@ -4,7 +4,7 @@ UWMS (Unified Workforce Management System) is a web-based workforce planning and
 
 The project started from real operational problems observed in care work, while the product and domain are intentionally designed to remain industry-neutral rather than hard-coded for one type of facility.
 
-> **Portfolio status:** Active development. Portfolio Release 1.0 is being prepared. Proven/current functionality and roadmap items are kept clearly separated.
+> **Portfolio status:** Portfolio Release 1.0 now has its full showcase scope, including My Schedule. The remaining gates are actual screenshots, repeatable demo capture, security review and public release.
 
 ## Problem
 
@@ -23,7 +23,7 @@ UWMS prioritizes hard constraints and surfaces honest shortages instead of viola
 - Honest Scheduling
 - Human Final Decision Maker
 
-## Manager Workflow
+## End-to-End Workflow
 
 ```text
 Organization / Facility
@@ -47,13 +47,15 @@ Candidate Generation
 Candidate Review / Correction
         ↓
 Publication
+        ↓
+My Schedule
 ```
 
 ## Staff Experience — My Schedule
 
-My Schedule is currently being completed for Portfolio Release 1.0. The portfolio will not present unfinished staff features as completed functionality.
+My Schedule is now an official Portfolio Release 1.0 showcase target.
 
-The planned visual demo will show the staff-first current effective published schedule, month/week views, selected-day details, Night → next-day continuation, leave/off distinctions and self-service entry points where implemented.
+The portfolio will capture the current implementation as evidence rather than describing unverified staff-side capabilities. The demo will show the actual Staff schedule experience and the utilities that are available in the current accepted build.
 
 ## Tech Stack
 
@@ -68,6 +70,6 @@ The planned visual demo will show the staff-first current effective published sc
 The Release 1.0 demo is designed as two connected stories:
 
 1. **Manager Operations** — setup, staffing demand, worker conditions, requests/leave, readiness, generation, Candidate Review, shortage analysis, correction and publication.
-2. **Staff Experience** — My Schedule and staff-facing utilities after the current My Schedule slice is complete.
+2. **Staff Experience** — My Schedule and the Staff-facing utilities actually available in the current build.
 
-See [docs/showcase-plan.md](docs/showcase-plan.md) and [demo/demo-scenario.md](demo/demo-scenario.md).
+See [Portfolio Web Preview](docs/index.html), [docs/showcase-plan.md](docs/showcase-plan.md), [demo/demo-scenario.md](demo/demo-scenario.md) and [demo/CODEX_CAPTURE_PROMPT.md](demo/CODEX_CAPTURE_PROMPT.md).
