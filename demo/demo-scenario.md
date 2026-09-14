@@ -1,77 +1,102 @@
-# UWMS Portfolio Demo Scenario
+# UWMS ポートフォリオ デモシナリオ
 
-Target duration: **60–90 seconds**. Hard maximum: **2 minutes**.
+目標時間: **60〜90秒**  
+最長: **2分以内**
 
-The purpose is not to explain every screen. The video should quickly prove that UWMS is a real end-to-end product with both Manager and Staff experiences.
+目的は全画面を説明することではありません。
 
-## 0. Opening — 5 seconds
+短時間で、UWMSが「勤務条件を入力する画面」だけではなく、**計画 → 候補生成 → 確認・修正 → 公開 → スタッフ閲覧**までつながった実際のプロダクトであることを見せます。
 
-Show UWMS and the Planning entry point.
+---
 
-Optional caption:
+## 0. オープニング — 5秒
+
+UWMSのロゴ / タイトルとPlanning入口を表示します。
+
+表示例:
 
 > Workforce Management & Scheduling System
 
-## 1. Planning — 10 seconds
+---
 
-Briefly show the Planning Workspace and one or two real planning inputs such as:
+## 1. Planning — 10秒
 
-- 必要人数 / staffing demand
+Planning Workspaceを短く表示し、次の中から1〜2項目だけ見せます。
+
+- 必要人数
+- 勤務条件
 - 勤務希望・休暇
 - Generation Readiness
 
-Do not stop to explain every field.
+すべての入力項目を説明しません。
 
-## 2. Candidate Generation / Review — 20 seconds
+---
 
-Generate or open a prepared Candidate and move quickly to Candidate Review.
+## 2. Candidate Generation / Review — 20秒
 
-Show the strongest visible evidence:
+Generateを実行するか、準備済みCandidateを開きます。
 
-- roster
-- shift presentation
-- Night / 明 where present in demo data
-- Candidate status
+Candidate Reviewでは、次の要素を中心に見せます。
 
-Candidate Review is the primary manager-side hero view.
+- 勤務表グリッド
+- シフト表示
+- Candidate状態
+- 夜勤 / 明け（デモデータに自然に含まれる場合）
 
-## 3. Shortage / Correction — 10–15 seconds
+**Candidate Reviewを管理者側のメイン画面として扱います。**
 
-Show 人員不足 / diagnostics and then the existing correction experience.
+---
 
-Key message:
+## 3. 人員不足 / Correction — 10〜15秒
 
-> UWMS surfaces shortages instead of hiding them by violating hard constraints, while the manager remains the final decision-maker.
+人員不足やDiagnosticsを確認し、その後Candidate Correctionを短く見せます。
 
-## 4. Publication — 5–10 seconds
+伝えたいメッセージ:
 
-Show the current publication action or published state.
+> UWMSはHARD制約を破って不足を隠さず、不足を明示したうえで管理者に最終判断を残します。
 
-## 5. My Schedule — 15–20 seconds
+---
 
-Switch to the Staff experience and show:
+## 4. Publication — 5〜10秒
 
-- My Schedule main view
-- one representative selected day/detail if supported
-- one useful Staff utility currently implemented
-- Night → 明 only when the prepared demo data naturally contains it
+Candidateを正式な勤務表として公開する流れ、または現在のPublished状態を表示します。
 
-Do not fabricate any state for the recording.
+Publicationが単純な上書き保存ではなく、正式な業務上の境界であることが伝われば十分です。
 
-## 6. Closing — 5 seconds
+---
 
-Show the portfolio / architecture / GitHub title.
+## 5. My Schedule — 15〜20秒
 
-Optional caption:
+スタッフ側へ切り替え、次を見せます。
 
-> Java 21 · Spring Boot · PostgreSQL · React · TypeScript
+- My Scheduleの月表示
+- 代表的な1日の詳細
+- 公開済み勤務表であることがわかる状態
+- 夜勤 → 明け（自然なデモデータがある場合のみ）
 
-## Capture rules
+Release 1.0では、正式に受入確認済みのスタッフ機能だけを紹介します。
 
-- Use only the current accepted implementation.
-- Use fictional/anonymized data.
-- Do not expose secrets or private development information.
-- Do not redesign the product for the video.
-- Prefer smooth, direct navigation over explanation-heavy pauses.
-- No narration is required.
-- If the complete story fits in ~60 seconds, prefer 60 seconds over stretching it to 90 seconds.
+**Shift Swapは、現在の実装と受入結果が正式に確認できるまでは動画に含めません。**
+
+---
+
+## 6. クロージング — 5秒
+
+ポートフォリオ / GitHub / 技術スタックを表示します。
+
+表示例:
+
+> Java 21 · Spring Boot · PostgreSQL · React · TypeScript · Timefold
+
+---
+
+## 撮影ルール
+
+- 現在の受入確認済み実装だけを使用する
+- 架空・匿名化したデータを使う
+- 秘密情報や実在する個人情報を映さない
+- ポートフォリオ用に製品と異なる架空画面を作らない
+- ブラウザのアカウント情報や不要なローカルパスを映さない
+- 長い説明より、自然で短い操作を優先する
+- ナレーションは必須ではない
+- 60秒程度で十分なら、無理に90秒へ伸ばさない
