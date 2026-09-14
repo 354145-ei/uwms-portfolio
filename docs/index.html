@@ -3,119 +3,133 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="UWMS — Enterprise Workforce Management & Scheduling System. Java 21 / Spring Boot / PostgreSQL / React / TypeScript." />
-  <title>UWMS — Portfolio</title>
+  <meta name="description" content="UWMS — 複雑な勤務条件・必要人数・休暇・勤務希望を考慮し、勤務表の作成から公開・閲覧までを支援するワークフォース管理システム。" />
+  <title>UWMS — ポートフォリオ</title>
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
 <div class="page-shell">
   <header class="topbar">
     <a class="brand" href="#top"><span class="brand-mark">WM</span><span><strong>UWMS</strong><small>Enterprise Edition</small></span></a>
-    <nav class="nav"><a href="#product">Product</a><a href="#showcase">Showcase</a><a href="#engineering">Engineering</a><a href="#architecture">Architecture</a><a href="#status">Status</a></nav>
-    <a class="button button-ghost" href="../README.md">GitHub README</a>
+    <nav class="nav">
+      <a href="#product">概要</a>
+      <a href="#showcase">画面紹介</a>
+      <a href="#engineering">設計</a>
+      <a href="#architecture">構成</a>
+      <a href="#status">公開準備</a>
+    </nav>
+    <a class="button button-ghost" href="../README.md">READMEを見る</a>
   </header>
 
   <main id="top">
     <section class="hero section">
       <div>
-        <div class="eyebrow"><span class="pulse"></span> PERSONAL FULL-STACK PROJECT · PORTFOLIO RELEASE 1.0</div>
+        <div class="eyebrow"><span class="pulse"></span> 個人開発・フルスタックプロジェクト</div>
         <h1>複雑な勤務条件を、<br><span>現実的な勤務表へ。</span></h1>
-        <p class="hero-lead">UWMSは、必要人数・勤務条件・勤務希望・休暇・夜勤などを考慮し、Candidate生成から管理者による確認・修正・公開、さらにStaff自身のMy Schedule閲覧までを支援するWorkforce Management & Scheduling Systemです。</p>
-        <div class="hero-actions"><a class="button button-primary" href="#showcase">プロジェクトを見る</a><a class="button button-secondary" href="engineering-decisions.md">Engineering Decisions</a></div>
+        <p class="hero-lead">UWMSは、必要人数・勤務条件・勤務希望・休暇・夜勤などを考慮し、勤務表候補の生成から管理者による確認・修正・公開、さらにスタッフ本人による勤務表確認までを支援するワークフォース管理システムです。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#showcase">画面を見る</a>
+          <a class="button button-secondary" href="engineering-decisions.md">設計上の工夫</a>
+        </div>
         <div class="stack-row"><span>Java 21</span><span>Spring Boot 3</span><span>PostgreSQL</span><span>React</span><span>TypeScript</span><span>Flyway</span><span>Testcontainers</span></div>
       </div>
       <aside class="hero-panel">
-        <div class="panel-title"><div><small>PLANNING PIPELINE</small><strong>Manager → Official Schedule → Staff</strong></div><span class="status-badge">SHOWCASE READY</span></div>
+        <div class="panel-title"><div><small>勤務表作成フロー</small><strong>管理者 → 正式な勤務表 → スタッフ</strong></div><span class="status-badge">主要画面確認済み</span></div>
         <div class="pipeline">
-          <div class="pipeline-item"><span>01</span><strong>Setup</strong><small>Workforce / Shift / Profession</small></div>
-          <div class="pipeline-item"><span>02</span><strong>Plan</strong><small>Coverage / Terms / Requests</small></div>
-          <div class="pipeline-item"><span>03</span><strong>Generate</strong><small>Best feasible Candidate</small></div>
-          <div class="pipeline-item"><span>04</span><strong>Review & Correct</strong><small>Shortage / Human decision</small></div>
-          <div class="pipeline-item"><span>05</span><strong>Publish & View</strong><small>Official Schedule / My Schedule</small></div>
+          <div class="pipeline-item"><span>01</span><strong>基本設定</strong><small>職員・シフト・職種</small></div>
+          <div class="pipeline-item"><span>02</span><strong>計画</strong><small>必要人数・勤務条件・希望</small></div>
+          <div class="pipeline-item"><span>03</span><strong>候補生成</strong><small>実現可能な勤務表候補を作成</small></div>
+          <div class="pipeline-item"><span>04</span><strong>確認・修正</strong><small>不足確認・管理者による調整</small></div>
+          <div class="pipeline-item"><span>05</span><strong>公開・閲覧</strong><small>正式な勤務表・マイスケジュール</small></div>
         </div>
       </aside>
     </section>
 
     <section class="metrics">
-      <article><strong>01</strong><span>End-to-end domain design</span></article>
-      <article><strong>02</strong><span>Constraint-aware scheduling</span></article>
-      <article><strong>03</strong><span>Manager final decision</span></article>
-      <article><strong>04</strong><span>Manager + Staff experience</span></article>
+      <article><strong>01</strong><span>業務要件から一貫して設計</span></article>
+      <article><strong>02</strong><span>複数の勤務制約を考慮</span></article>
+      <article><strong>03</strong><span>最終判断は管理者</span></article>
+      <article><strong>04</strong><span>管理者・スタッフ双方に対応</span></article>
     </section>
 
     <section id="product" class="section two-column">
-      <div><p class="section-kicker">THE PROBLEM</p><h2>勤務表作成は、単なるCRUDではありません。</h2></div>
-      <div class="section-body"><p>現実のシフト作成では、必要人数、職種、資格、曜日、祝日、夜勤、休暇、勤務希望、労働時間、連続勤務など複数の条件が同時に影響します。</p><p>UWMSでは、条件を満たせない場合に無理な割当で不足を隠すのではなく、<strong>HARD制約を守りながら不足を可視化し、最終判断を管理者に残す</strong>ことを重視しています。</p></div>
+      <div><p class="section-kicker">課題</p><h2>勤務表作成は、単なるCRUDではありません。</h2></div>
+      <div class="section-body"><p>現実のシフト作成では、必要人数、職種、資格、曜日、祝日、夜勤、休暇、勤務希望、労働時間、連続勤務など、複数の条件が同時に影響します。</p><p>UWMSでは、条件を満たせない場合に無理な割当で不足を隠すのではなく、<strong>重要な制約を守りながら不足を可視化し、最終判断を管理者に残す</strong>ことを重視しています。</p></div>
     </section>
 
     <section class="section">
-      <p class="section-kicker">PRODUCT PRINCIPLES</p>
+      <p class="section-kicker">設計方針</p>
       <div class="principle-grid">
-        <article><span>01</span><h3>Coverage before Schedule</h3><p>必要人数を先に定義し、その後で勤務表を作成。</p></article>
-        <article><span>02</span><h3>Policy before Decision</h3><p>勤務条件や業務ルールを先に定義。</p></article>
-        <article><span>03</span><h3>Honest Scheduling</h3><p>不足を隠すためにHARD制約を破らない。</p></article>
-        <article><span>04</span><h3>Human Final Decision</h3><p>Candidateは管理者が確認・修正して公開。</p></article>
-        <article><span>05</span><h3>Revision, Never Replace</h3><p>公開後の変更を履歴として扱う。</p></article>
-        <article><span>06</span><h3>Explain Every Decision</h3><p>不足や制約など判断理由を見える形へ。</p></article>
+        <article><span>01</span><h3>必要人数を先に定義</h3><p>勤務表を作る前に、どの日時・シフト・職種で何人必要かを明確にします。</p></article>
+        <article><span>02</span><h3>勤務条件を先に定義</h3><p>職員ごとの勤務条件や業務ルールを、生成処理より先に設定します。</p></article>
+        <article><span>03</span><h3>不足を隠さない</h3><p>必要人数を満たせない場合は、無理な割当ではなく不足として表示します。</p></article>
+        <article><span>04</span><h3>最終判断は人が行う</h3><p>勤務表候補は管理者が確認・修正したうえで公開します。</p></article>
+        <article><span>05</span><h3>公開後の履歴を残す</h3><p>正式な勤務表を単純に上書きせず、変更を履歴として扱います。</p></article>
+        <article><span>06</span><h3>判断理由を見える形に</h3><p>人員不足や制約など、結果の理由を確認できる設計を目指します。</p></article>
       </div>
     </section>
 
     <section id="showcase" class="section">
-      <div class="section-heading"><div><p class="section-kicker">PRODUCT SHOWCASE</p><h2>Manager と Staff、両方の体験。</h2></div><p>下のslotは、Portfolio Demo Captureで取得するUWMS実画面に差し替えます。デザイン用の偽画面は使用しません。</p></div>
+      <div class="section-heading"><div><p class="section-kicker">画面紹介</p><h2>管理者とスタッフ、両方の業務を支援。</h2></div><p>掲載用画像は、実際のUWMS画面から選定します。デザイン用の架空画面は使用しません。</p></div>
       <div class="showcase-grid">
-        <article class="showcase-card showcase-card-wide"><div class="screen-placeholder"><div><span>HERO SCREENSHOT SLOT</span><strong>Candidate Review</strong><small>Actual UWMS capture will replace this slot</small></div></div><div class="card-copy"><span class="tag">HERO VIEW</span><h3>Candidate Review</h3><p>生成された勤務表、人員不足、診断、修正を一つの業務文脈で確認するmanager-sideの中心画面。</p></div></article>
-        <article class="showcase-card"><div class="screen-placeholder"><div><span>MANAGER</span><strong>Planning Workspace</strong><small>Actual screenshot slot</small></div></div><div class="card-copy"><h3>Planning Workspace</h3><p>必要人数、対象スタッフ、勤務条件、勤務希望・休暇、作成前チェックからCandidate生成へ。</p></div></article>
-        <article class="showcase-card"><div class="screen-placeholder warning"><div><span>DIAGNOSTICS</span><strong>人員不足</strong><small>Actual screenshot slot</small></div></div><div class="card-copy"><h3>Shortage Diagnostics</h3><p>不足を隠さず、どのShift / Professionで何が不足しているか確認。</p></div></article>
-        <article class="showcase-card"><div class="screen-placeholder"><div><span>WORKFORCE</span><strong>Scheduling Terms</strong><small>Actual screenshot slot</small></div></div><div class="card-copy"><h3>Workforce & Terms</h3><p>Worker、Profession、Qualification、長期的な勤務条件を管理。</p></div></article>
-        <article class="showcase-card"><div class="screen-placeholder staff"><div><span>STAFF EXPERIENCE</span><strong>My Schedule</strong><small>Actual screenshot slot</small></div></div><div class="card-copy"><span class="tag tag-done">SHOWCASE READY</span><h3>My Schedule</h3><p>現在の実装をそのままcaptureし、公開済み勤務表をStaff視点で確認する体験と利用可能なutilityを紹介します。</p></div></article>
+        <article class="showcase-card showcase-card-wide"><div class="screen-placeholder"><div><span>メイン画面</span><strong>勤務表候補の確認</strong><small>実画面スクリーンショット掲載予定</small></div></div><div class="card-copy"><span class="tag">管理者向け主要画面</span><h3>勤務表候補の確認</h3><p>生成された勤務表、人員不足、診断情報、修正への導線を一つの業務画面で確認できます。</p></div></article>
+        <article class="showcase-card"><div class="screen-placeholder"><div><span>計画</span><strong>勤務表作成ワークスペース</strong><small>実画面スクリーンショット掲載予定</small></div></div><div class="card-copy"><h3>勤務表作成ワークスペース</h3><p>必要人数、対象スタッフ、勤務条件、勤務希望・休暇、作成前チェックから勤務表候補の生成へ進みます。</p></div></article>
+        <article class="showcase-card"><div class="screen-placeholder warning"><div><span>診断</span><strong>人員不足</strong><small>実画面スクリーンショット掲載予定</small></div></div><div class="card-copy"><h3>人員不足の確認</h3><p>不足を隠さず、どの日時・シフト・職種で何人不足しているかを確認できます。</p></div></article>
+        <article class="showcase-card"><div class="screen-placeholder"><div><span>職員管理</span><strong>勤務条件</strong><small>実画面スクリーンショット掲載予定</small></div></div><div class="card-copy"><h3>職員・勤務条件管理</h3><p>職員情報、職種、資格、長期的な勤務条件を管理します。</p></div></article>
+        <article class="showcase-card"><div class="screen-placeholder staff"><div><span>スタッフ向け</span><strong>マイスケジュール</strong><small>実画面スクリーンショット掲載予定</small></div></div><div class="card-copy"><span class="tag tag-done">動作確認済み</span><h3>マイスケジュール</h3><p>スタッフ本人が、現在有効な公開済み勤務表を確認するための画面です。</p></div></article>
       </div>
     </section>
 
     <section id="engineering" class="section">
-      <div class="section-heading"><div><p class="section-kicker">ENGINEERING DEPTH</p><h2>見せたいのは画面だけではありません。</h2></div><p>設計判断を説明できることをPortfolioの中心に置いています。</p></div>
+      <div class="section-heading"><div><p class="section-kicker">設計上の工夫</p><h2>見せたいのは画面だけではありません。</h2></div><p>単純なCRUDではなく、業務上の意味や履歴、認可、勤務制約まで考慮しています。</p></div>
       <div class="decision-grid">
-        <article><span>IDENTITY</span><h3>Workforce Member ≠ Login Identity</h3><p>ログインしない職員もScheduling対象にできるよう業務Workerと認証Identityを分離。</p></article>
-        <article><span>DATA MODEL</span><h3>UUID + Business Code</h3><p>内部参照の安定性と人間向け業務コードを分離。</p></article>
-        <article><span>SCHEDULING</span><h3>Coverage is Minimum</h3><p>合法な余剰は許容し、不足は明示。</p></article>
-        <article><span>CROSS-DATE</span><h3>夜 → 明</h3><p>夜勤を日付をまたぐassignmentとして扱う。</p></article>
-        <article><span>INTEGRITY</span><h3>Historical Integrity</h3><p>過去のCandidate / Publicationを現在設定から無条件に再構築しない。</p></article>
-        <article><span>SAFETY</span><h3>Backend-authoritative Rules</h3><p>重要な認可・validation・constraintをUI表示だけに依存させない。</p></article>
+        <article><span>職員と認証</span><h3>職員情報とログインIDを分離</h3><p>ログインしない職員も勤務表作成の対象にできるよう、業務上の職員情報と認証用IDを分けています。</p></article>
+        <article><span>データ設計</span><h3>内部IDと業務コードを分離</h3><p>システム内部の安定した参照と、人が扱いやすい業務コードを別に管理します。</p></article>
+        <article><span>勤務表作成</span><h3>必要人数は最低人数</h3><p>必要人数以上の合法な配置は許容し、不足がある場合は明示します。</p></article>
+        <article><span>日付をまたぐ勤務</span><h3>夜 → 明</h3><p>夜勤を日付をまたぐ1つの勤務として扱い、翌日の「明」を独立したシフトにはしません。</p></article>
+        <article><span>履歴</span><h3>過去の状態を保持</h3><p>過去の勤務表候補や公開済み勤務表を、現在の設定だけから無条件に再構築しない設計を重視しています。</p></article>
+        <article><span>安全性</span><h3>重要な判定はバックエンド側で実施</h3><p>認可や重要な制約を、画面表示だけに依存させない構成にしています。</p></article>
       </div>
     </section>
 
     <section id="architecture" class="section">
-      <div class="section-heading"><div><p class="section-kicker">ARCHITECTURE</p><h2>Full-stack system design</h2></div><a href="architecture.md">Architecture details →</a></div>
+      <div class="section-heading"><div><p class="section-kicker">システム構成</p><h2>フルスタックで設計・実装</h2></div><a href="architecture.md">詳しい構成を見る →</a></div>
       <div class="arch-flow">
-        <div class="arch-box"><span>FRONTEND</span><strong>React + TypeScript + Vite</strong><small>Manager / Staff Web UI</small></div><div class="arch-arrow">REST</div>
-        <div class="arch-box arch-main"><span>APPLICATION</span><strong>Java 21 + Spring Boot 3</strong><small>Workforce · Planning · Candidate · Publication · Authorization</small></div><div class="arch-arrow">SQL</div>
-        <div class="arch-box"><span>DATA</span><strong>PostgreSQL + Flyway</strong><small>Versioned schema / retained business data</small></div>
+        <div class="arch-box"><span>フロントエンド</span><strong>React + TypeScript + Vite</strong><small>管理者・スタッフ向けWeb UI</small></div><div class="arch-arrow">REST</div>
+        <div class="arch-box arch-main"><span>アプリケーション</span><strong>Java 21 + Spring Boot 3</strong><small>職員管理・計画・勤務表候補・公開・認可</small></div><div class="arch-arrow">SQL</div>
+        <div class="arch-box"><span>データベース</span><strong>PostgreSQL + Flyway</strong><small>スキーマ管理・業務データ保持</small></div>
       </div>
     </section>
 
     <section class="section">
-      <div><p class="section-kicker">TECH STACK</p><h2>実装・検証まで一貫して担当。</h2></div>
-      <div class="tech-grid"><article><h3>Backend</h3><p>Java 21 · Spring Boot 3 · Maven · REST · OpenAPI · JPA / JDBC</p></article><article><h3>Data</h3><p>PostgreSQL · Flyway · effective-dated business rules</p></article><article><h3>Frontend</h3><p>React · TypeScript · Vite · Responsive Web / PWA-oriented UI</p></article><article><h3>Testing</h3><p>JUnit 5 · Mockito · Testcontainers · Integration / Browser Acceptance</p></article></div>
+      <div><p class="section-kicker">使用技術</p><h2>設計から実装・検証まで一貫して担当。</h2></div>
+      <div class="tech-grid">
+        <article><h3>バックエンド</h3><p>Java 21 · Spring Boot 3 · Maven · REST API · OpenAPI · JPA / JDBC</p></article>
+        <article><h3>データベース</h3><p>PostgreSQL · Flyway</p></article>
+        <article><h3>フロントエンド</h3><p>React · TypeScript · Vite · レスポンシブWeb UI</p></article>
+        <article><h3>テスト</h3><p>JUnit 5 · Mockito · Testcontainers · 結合テスト · ブラウザ動作確認</p></article>
+      </div>
     </section>
 
     <section class="section">
-      <p class="section-kicker">MY CONTRIBUTION</p><h2>個人開発として、業務要件からAcceptanceまで。</h2>
-      <div class="contribution-list"><span>要件整理</span><span>Domain Design</span><span>DB Design</span><span>Backend</span><span>REST API</span><span>Frontend</span><span>Scheduling Rules</span><span>Authorization</span><span>Migration</span><span>Testing</span><span>UI / UX</span><span>Documentation</span></div>
-      <p class="disclosure">AI支援ツールも開発補助として利用していますが、業務要件、設計判断、Acceptance Criteria、レビューおよび最終検証は開発者が管理しています。</p>
+      <p class="section-kicker">担当範囲</p><h2>個人開発として、業務要件から受入確認まで。</h2>
+      <div class="contribution-list"><span>業務課題整理</span><span>要件定義</span><span>ドメイン設計</span><span>DB設計</span><span>バックエンド</span><span>REST API</span><span>フロントエンド</span><span>勤務表ルール</span><span>認可</span><span>DB移行</span><span>テスト</span><span>UI / UX</span><span>ドキュメント</span></div>
+      <p class="disclosure">AI支援ツールも開発補助として利用していますが、業務要件、設計判断、受入条件、レビューおよび最終確認は開発者自身が管理しています。</p>
     </section>
 
     <section id="status" class="section status-section">
-      <div><p class="section-kicker">PORTFOLIO RELEASE 1.0</p><h2>次は実画面を証拠として追加。</h2><p>My Scheduleを含むshowcase対象が揃ったため、次のGateは安全なdemo datasetによる実画面Screenshot、utility capture、短いdemo recording、security reviewです。</p></div>
+      <div><p class="section-kicker">公開準備状況</p><h2>次は掲載用スクリーンショットの選定。</h2><p>主要な管理者向け画面から公開済み勤務表、マイスケジュールまで、安全な架空データを使った動作確認は完了しています。現在は、ポートフォリオに掲載する実画面スクリーンショットを選定しています。</p></div>
       <div class="status-list">
-        <div><span class="status-ok"></span><strong>Manager planning flow</strong><small>Showcase target</small></div>
-        <div><span class="status-ok"></span><strong>Candidate Review</strong><small>Hero showcase target</small></div>
-        <div><span class="status-ok"></span><strong>My Schedule</strong><small>Showcase target</small></div>
-        <div><span class="status-ok"></span><strong>Architecture / engineering story</strong><small>Documented</small></div>
-        <div><span class="status-next"></span><strong>Actual screenshots + demo capture</strong><small>Next gate</small></div>
+        <div><span class="status-ok"></span><strong>管理者向け勤務表作成フロー</strong><small>動作確認済み</small></div>
+        <div><span class="status-ok"></span><strong>勤務表候補の確認・修正</strong><small>動作確認済み</small></div>
+        <div><span class="status-ok"></span><strong>公開済み勤務表・マイスケジュール</strong><small>動作確認済み</small></div>
+        <div><span class="status-ok"></span><strong>システム構成・設計説明</strong><small>作成済み</small></div>
+        <div><span class="status-next"></span><strong>掲載用スクリーンショット</strong><small>選定中</small></div>
       </div>
     </section>
   </main>
 
-  <footer><div class="brand footer-brand"><span class="brand-mark">WM</span><span><strong>UWMS</strong><small>Portfolio</small></span></div><p>Enterprise Workforce Management & Scheduling System</p><div><a href="../README.md">README</a><a href="architecture.md">Architecture</a><a href="engineering-decisions.md">Decisions</a></div></footer>
+  <footer><div class="brand footer-brand"><span class="brand-mark">WM</span><span><strong>UWMS</strong><small>ポートフォリオ</small></span></div><p>Enterprise Workforce Management & Scheduling System</p><div><a href="../README.md">README</a><a href="architecture.md">システム構成</a><a href="engineering-decisions.md">設計上の工夫</a></div></footer>
 </div>
 </body>
 </html>
