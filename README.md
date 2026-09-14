@@ -1,14 +1,14 @@
 # UWMS — Enterprise Workforce Management & Scheduling System
 
-> 複雑な勤務条件・必要人数・休暇・勤務希望を考慮し、勤務表の作成から確認・修正・公開、Staff自身の勤務表確認までを支援するワークフォース管理システム。
+> 複雑な勤務条件、必要人数、休暇、勤務希望などを考慮し、勤務表の作成・確認・修正・公開から、スタッフ本人による勤務表確認までを支援するワークフォース管理システムです。
 
 UWMS（Unified Workforce Management System）は、シフト勤務を行う組織向けに個人開発しているWebベースのワークフォース管理・勤務表作成システムです。
 
-介護現場での実務経験を主な出発点としていますが、介護専用にハードコードせず、医療・小売・宿泊・製造など複数のシフト型業務にも適用できる汎用的な設計を目指しています。
+介護現場での実務経験を主な出発点としていますが、介護専用に限定せず、医療・小売・宿泊・製造など、さまざまなシフト型業務にも応用できる汎用的な設計を目指しています。
 
-> **Portfolio status:** Portfolio Release 1.0のshowcase対象が揃いました。現在は実画面Screenshot・demo capture・security reviewを準備しています。
+> **公開準備状況:** 主要な画面と業務フローはポートフォリオで紹介できる段階まで確認済みです。現在は、掲載用スクリーンショットの選定と最終的なセキュリティ確認を進めています。
 
-[Portfolio Web Preview](docs/index.html) · [English](README_EN.md) · [Architecture](docs/architecture.md) · [Engineering Decisions](docs/engineering-decisions.md)
+[ポートフォリオ画面](docs/index.html) · [English](README_EN.md) · [システム構成](docs/architecture.md) · [設計上の工夫](docs/engineering-decisions.md)
 
 ---
 
@@ -16,77 +16,75 @@ UWMS（Unified Workforce Management System）は、シフト勤務を行う組�
 
 勤務表の作成では、単に「空いている職員」をシフトへ配置するだけでは不十分です。
 
-同時に考える必要がある例:
+実際には、次のような条件を同時に考える必要があります。
 
 - 必要人数
-- 職種 / Qualification
+- 職種・資格
 - 職員ごとの勤務条件
 - 勤務可能曜日・祝日勤務可否
 - 希望休・希望シフト
 - 有給・欠勤
-- 夜勤 / 明け
+- 夜勤・明け
 - 連続勤務
 - 労働時間
 - 人員不足
 
-UWMSでは、必要人数を満たせないときにHARD制約を破って不足を隠すのではなく、制約を守ったうえで不足を可視化し、管理者を最終判断者として残すことを重視しています。
+UWMSでは、必要人数を満たせない場合でも、絶対に守るべき制約を無理に緩和して不足を隠すのではなく、**制約を守ったうえで不足を可視化し、最終判断を管理者に残す**ことを重視しています。
 
 ---
 
-## 設計原則
+## 設計方針
 
-- **Coverage before Schedule**
-- **Policy before Decision**
-- **Workspace before Publish**
-- **Revision, Never Replace**
-- **Explain Every Decision**
-- **Best Feasible Planning**
-- **Honest Scheduling**
-- **Human Final Decision Maker**
+- **必要人数を先に定義する** — 勤務表を作る前に、どの日時・シフト・職種で何人必要かを明確にします。
+- **勤務条件を先に定義する** — 職員ごとの勤務条件や業務ルールを、生成処理より先に設定します。
+- **不足を隠さない** — 必要人数を満たせない場合は、無理な割当ではなく不足として表示します。
+- **最終判断は人が行う** — 自動生成された勤務表候補は、管理者が確認・修正したうえで公開します。
+- **公開後の変更を履歴として扱う** — 正式な勤務表を単純に上書きせず、変更の履歴を残す考え方を採用しています。
+- **判断理由を見える形にする** — 人員不足や制約など、なぜその結果になったのかを確認できる設計を目指しています。
 
 ---
 
-## End-to-End Workflow
+## 勤務表作成の流れ
 
 ```text
-Organization / Facility
-        ↓
-Workforce
-        ↓
-Profession / Qualification
-        ↓
-Shift Templates
-        ↓
-必要人数
-        ↓
-勤務条件
-        ↓
+組織・施設設定
+      ↓
+職員管理
+      ↓
+職種・資格設定
+      ↓
+シフト設定
+      ↓
+必要人数設定
+      ↓
+勤務条件設定
+      ↓
 勤務希望・休暇
-        ↓
+      ↓
 作成前チェック
-        ↓
-Candidate Generation
-        ↓
-Candidate Review / Correction
-        ↓
-Publish
-        ↓
-My Schedule
+      ↓
+勤務表候補の生成
+      ↓
+勤務表候補の確認・修正
+      ↓
+勤務表の公開
+      ↓
+マイスケジュール
 ```
 
 ---
 
 ## 主な実装領域
 
-### Workforce / Setup
-- Tenant / Organization / Facilityを前提とした管理
-- Workforce Member管理
-- Profession / Qualification
-- Workforce MemberとLogin Identityの分離
-- Facility単位の運用スコープ
+### 職員・基本設定
+- 組織・施設を前提とした管理
+- 職員情報（Workforce Member）の管理
+- 職種・資格の管理
+- 職員情報とログインIDを分離した設計
+- 施設単位での運用スコープ
 
-### Staffing Demand
-Coverageは「ぴったりの人数」ではなく**最低必要人数**として扱います。
+### 必要人数設定
+必要人数は「必ず同じ人数にする値」ではなく、**最低限必要な人数**として扱います。
 
 ```text
 必要人数 = 3
@@ -96,8 +94,8 @@ Coverageは「ぴったりの人数」ではなく**最低必要人数**とし�
 4名 → 有効な余剰
 ```
 
-### Scheduling Terms
-長期的な勤務条件と、期間・日付ごとの勤務希望を分離します。
+### 勤務条件
+長期的な勤務条件と、特定の日付や期間だけに適用される勤務希望を分けて管理します。
 
 例:
 - 勤務可能曜日
@@ -112,52 +110,52 @@ Coverageは「ぴったりの人数」ではなく**最低必要人数**とし�
 - 時間有給
 - 欠勤
 
-承認済みの希望は、適用される意味に応じてScheduler Constraintへ反映します。
+承認済みの勤務希望や休暇は、その内容に応じて勤務表作成時の制約として反映されます。
 
-### Night / 明け
-夜勤は日付をまたぐ1つの勤務として扱います。
+### 夜勤・明け
+夜勤は、日付をまたぐ1つの勤務として扱います。
 
 ```text
 10/01  夜
 10/02  明
 ```
 
-`明`は独立したShift Templateではなく、前日の夜勤の継続 / reserved stateです。
+「明」は独立したシフトではなく、前日の夜勤から続く状態として扱います。
 
-### Candidate Generation
-勤務条件・必要人数・休暇・勤務希望などを基にCandidateを生成します。
+### 勤務表候補の生成
+必要人数、勤務条件、休暇、勤務希望などを基に、勤務表候補を生成します。
 
-不足を隠すためにHARD制約を緩和するのではなく、Best Feasibleな結果と不足を可視化する方針です。
+不足を隠すために重要な制約を緩和するのではなく、**実現可能な範囲で最善の候補を作成し、残った不足を明示する**方針です。
 
-### Candidate Review / Correction
-Candidateを勤務表として確認し、人員不足・診断情報を確認したうえで、管理者が修正・判断できる運用UIを構築しています。
+### 勤務表候補の確認・修正
+自動生成された勤務表候補を確認し、人員不足や診断情報を見ながら、管理者が最終調整を行える画面を実装しています。
 
-### Publication
-Candidateを正式な勤務表として公開します。公開履歴は単純上書きではなく、Revision / Publication lifecycleとして保持する設計です。
+### 勤務表の公開
+確認・修正した勤務表候補を正式な勤務表として公開します。公開後の変更も単純な上書きではなく、履歴を残せる設計を重視しています。
 
-### Staff Experience — My Schedule
-My ScheduleはPortfolio Release 1.0の正式なshowcase対象です。
+### スタッフ向け「マイスケジュール」
+スタッフ本人が、現在有効な公開済み勤務表を確認するための画面です。
 
-Portfolioでは、現在の実装そのものをcaptureし、Staffが公開済み勤務表を確認する体験と、その画面から利用できるutilityを紹介します。README上で未検証のsub-featureを追加して見せることはせず、実画面を証拠として掲載します。
+ポートフォリオでは、実際の画面を使って、公開済み勤務表の確認とスタッフ向け機能を紹介します。未確認の機能を実装済みとして見せることはしません。
 
 ---
 
-## Architecture
+## システム構成
 
 ```text
 React / TypeScript / Vite
           │
-          │ REST
+          │ REST API
           ▼
 Java 21 / Spring Boot 3
           │
-          ├── Workforce
-          ├── Planning
-          ├── Scheduling Terms
-          ├── Staffing Demand
-          ├── Candidate
-          ├── Publication
-          └── Authorization
+          ├── 職員管理
+          ├── 計画
+          ├── 勤務条件
+          ├── 必要人数
+          ├── 勤務表候補
+          ├── 公開
+          └── 認可
           │
           ▼
 PostgreSQL
@@ -169,64 +167,61 @@ PostgreSQL
 
 ---
 
-## Tech Stack
+## 使用技術
 
-### Backend
+### バックエンド
 - Java 21
 - Spring Boot 3
 - Maven
 - PostgreSQL
 - JPA / JDBC
 - Flyway
-- REST
+- REST API
 - OpenAPI / Swagger
 
-### Frontend
+### フロントエンド
 - React
 - TypeScript
 - Vite
-- Responsive Web / PWA-oriented UI
+- レスポンシブWeb UI
 
-### Testing
+### テスト
 - JUnit 5
 - Mockito
 - Testcontainers
-- Frontend automated tests
-- Integration tests
-- Manual browser acceptance
+- フロントエンド自動テスト
+- 結合テスト
+- ブラウザによる動作確認
 
 ---
 
-## Engineering Decisions
+## 設計上の工夫
 
-CRUDだけでなく、次の設計課題にも取り組んでいます。
+単純なCRUDだけではなく、次のような設計課題にも取り組んでいます。
 
-- Workforce MemberとLogin Identityを分離する理由
-- UUIDとBusiness Codeを分離する理由
-- Coverageをminimumとして扱う理由
-- Published Scheduleを単純上書きしない理由
-- Night D → 明 D+1をcross-date semanticsとして扱う理由
-- HARD constraint違反で人員不足を隠さない理由
+- 職員情報とログインIDを分離する理由
+- 内部ID（UUID）と業務上のコードを分離する理由
+- 必要人数を「最低人数」として扱う理由
+- 公開済み勤務表を単純に上書きしない理由
+- 夜勤と翌日の「明」を、日付をまたぐ1つの勤務として扱う理由
+- 人員不足を隠すために重要な制約を破らない理由
 
 詳細: [docs/engineering-decisions.md](docs/engineering-decisions.md)
 
 ---
 
-## Demo / Visual Showcase
+## 画面紹介
 
-Portfolio Release 1.0では、READMEだけではなく**実際のUIとutilityを短時間で理解できるデモ**を用意します。
+ポートフォリオでは、実際のUWMS画面を使って、次の流れを短時間で理解できるように紹介します。
 
-Showcase target:
-
-1. Planning Workspace
-2. 必要人数 / Scheduling Terms / 勤務希望・休暇
-3. Generation Readiness
-4. Candidate Generation
-5. Candidate Review
-6. 人員不足 / diagnostics
-7. Correction → Publication
-8. My Schedule
-9. My Scheduleから利用できるcurrent utility
+1. 計画画面
+2. 必要人数・勤務条件・勤務希望・休暇
+3. 作成前チェック
+4. 勤務表候補の生成
+5. 勤務表候補の確認
+6. 人員不足の確認
+7. 管理者による修正と公開
+8. マイスケジュール
 
 詳細: [demo/demo-scenario.md](demo/demo-scenario.md) / [docs/showcase-plan.md](docs/showcase-plan.md)
 
@@ -236,39 +231,39 @@ Showcase target:
 
 個人開発として、以下を一貫して担当しています。
 
-- 業務課題整理
+- 業務課題の整理
 - 要件定義
-- Domain設計
-- Database設計
-- Backend実装
+- ドメイン設計
+- データベース設計
+- バックエンド実装
 - REST API設計
-- Frontend実装
-- Scheduling rule設計
-- Authorization設計
-- Migration設計
-- Automated Test
-- Manual Acceptance
+- フロントエンド実装
+- 勤務表作成ルールの設計
+- 認可設計
+- データベース移行設計
+- 自動テスト
+- 手動受入確認
 - UI / UX設計
-- Documentation
+- ドキュメント作成
 
-AI支援ツールも開発補助として利用していますが、業務要件、設計判断、Acceptance Criteria、レビューおよび最終検証は開発者が管理しています。
+AI支援ツールも開発補助として利用していますが、業務要件、設計判断、受入条件、レビューおよび最終確認は開発者自身が管理しています。
 
 ---
 
-## Portfolio Release 1.0 Gate
+## 公開準備状況
 
-- [x] GitHub staging repository
-- [x] Japanese README
-- [x] English README
-- [x] Architecture / engineering story
-- [x] Portfolio web page foundation
-- [x] Manager-side showcase scope
-- [x] My Schedule showcase scope
-- [ ] 6–8 anonymized actual screenshots
-- [ ] Automated / repeatable demo capture
-- [ ] Short demo recording
-- [ ] Utility showcase based on current build
-- [ ] Security review
-- [ ] Public release
+- [x] GitHubポートフォリオ用リポジトリ
+- [x] 日本語README
+- [x] 英語README
+- [x] システム構成・設計説明
+- [x] ポートフォリオWebページの基礎
+- [x] 管理者向け主要フローの動作確認
+- [x] マイスケジュールの動作確認
+- [x] 安全な架空データによる画面確認
+- [ ] 掲載用スクリーンショットの最終選定
+- [ ] 最終セキュリティ確認
+- [ ] 公開
 
-Payrollは初期製品スコープには含めていません。
+短いデモ動画は必須ではなく、必要に応じて追加する予定です。
+
+給与計算は、現在の初期製品スコープには含めていません。
