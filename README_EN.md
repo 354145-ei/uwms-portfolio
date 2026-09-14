@@ -6,6 +6,8 @@ UWMS (Unified Workforce Management System) is a personal full-stack project for 
 
 The project started from operational problems observed in care work, but the domain is intentionally designed to remain industry-neutral so the same scheduling concepts can be applied to healthcare, retail, hospitality, manufacturing and other shift-based environments.
 
+▶ **[Watch the UWMS Demo on YouTube](https://youtu.be/cms7WxH145w)**
+
 [Portfolio Web](docs/index.html) · [Architecture](docs/architecture_EN.md) · [Engineering Decisions](docs/engineering-decisions_EN.md) · [Demo Scenario](demo/demo-scenario.md) · [日本語](README.md)
 
 ---
@@ -229,7 +231,7 @@ AI-assisted development tools are used as development support, while requirement
 - [x] My Schedule verified
 - [x] Fictional demo data used for portfolio verification
 - [ ] Final screenshot selection
-- [ ] Short demo video capture if useful
+- [x] Demo video captured and linked on YouTube
 - [ ] Final public-security review
 - [ ] Public release
 
