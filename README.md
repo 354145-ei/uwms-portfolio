@@ -8,6 +8,8 @@ UWMS（Unified Workforce Management System）は、シフト勤務を行う組�
 
 **応募向けポートフォリオとして、画面だけでなく、業務要件・設計判断・バックエンド検証・履歴管理まで説明できることを重視しています。**
 
+▶ **[UWMS デモ動画を見る（YouTube）](https://youtu.be/cms7WxH145w)**
+
 [ポートフォリオ画面](docs/index.html) · [設計上の判断](docs/engineering-decisions.md) · [システム構成](docs/architecture.md) · [デモシナリオ](demo/demo-scenario.md) · [English](README_EN.md)
 
 ---
@@ -38,7 +40,7 @@ UWMS（Unified Workforce Management System）は、シフト勤務を行う組�
 - アーキテクチャ
 - 重要な設計判断
 - デモシナリオ
-- スクリーンショット / 短いデモ動画（公開前に匿名化・安全確認）
+- スクリーンショット / デモ動画（公開前に匿名化・安全確認）
 
 ---
 
@@ -293,7 +295,7 @@ AI支援ツールも開発補助として利用していますが、業務要件
 - [x] My Scheduleの動作確認
 - [x] 架空データによる画面確認
 - [ ] 掲載用スクリーンショットの最終選定
-- [ ] 短いデモ動画の最終収録（必要に応じて）
+- [x] デモ動画の収録・YouTube掲載
 - [ ] 公開前セキュリティ確認
 - [ ] リポジトリ公開
 
