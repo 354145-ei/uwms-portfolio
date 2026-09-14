@@ -1,262 +1,165 @@
-# UWMS Portfolio Visual Showcase Plan
+# UWMS ポートフォリオ画面・デモ計画
 
-## Goal
+## 目的
 
-Show both the **appearance** and the **operational utility** of UWMS in a recruiter-friendly way.
+採用担当者が短時間で、UWMSについて次の3点を理解できる構成にします。
 
-The final portfolio should not rely on source code alone. A recruiter should be able to understand the product from screenshots and a short demo video, while an engineer can continue into architecture and implementation details.
+1. どんな業務課題を解決するプロダクトか
+2. 実際にどこまで動くのか
+3. どのような設計・技術判断を行ったのか
+
+ソースコードの量を見せることより、**実際の画面・業務フロー・設計意図をわかりやすく見せること**を優先します。
 
 ---
 
-## Showcase Structure
+## Release 1.0で見せるストーリー
 
-### Track A — Manager Operations
+### A. 管理者側
 
-This track can be prepared before My Schedule is fully complete.
+#### 1. Planning Workspace
 
-#### 1. Planning Workspace / 勤務表作成
-Show the planning flow and where the manager is in the process.
-
-What to demonstrate:
-- current PlanningPeriod / Facility context
-- planning steps
-- clear progress/state
+勤務表作成の入口として、対象期間・Facility・進行状況がわかる画面を短く見せます。
 
 #### 2. 必要人数 / Staffing Demand
-Show that staffing demand exists before schedule generation.
 
-What to demonstrate:
-- Shift
-- Profession
-- minimum required headcount
-- human-readable setup
+勤務表生成より先に「どの日時・シフト・職種で何人必要か」を定義していることを見せます。
 
-Key portfolio message:
-> UWMS models staffing demand first instead of generating a roster blindly.
+**伝えたいこと:**
+> UWMSは、空いている職員を先に並べるのではなく、必要人数を計画の出発点にします。
 
-#### 3. 対象スタッフ / Workforce Scope
-Show who participates in the current planning workspace.
+#### 3. Workforce / Scheduling Terms
 
-What to demonstrate:
-- selected workers
-- profession/business identity
-- clean manager interaction
+代表的な勤務条件だけを見せます。
 
-#### 4. 勤務条件 / Scheduling Terms
-Show a few representative constraints, not every field.
+例:
+- 勤務可能曜日
+- 祝日勤務可否
+- 夜勤可否
+- 週の勤務日数 / 勤務時間条件
 
-Good examples:
-- weekday eligibility
-- public-holiday eligibility
-- Night eligibility / Night agreement
-- working-time condition where useful
+全項目を説明する必要はありません。
 
-Key portfolio message:
-> Long-lived worker rules are separate from one-off monthly requests.
+#### 4. 勤務希望・休暇
 
-#### 5. 勤務希望・休暇
-Show period-specific information.
+期間固有の情報として、希望休・希望シフト・有給などを見せます。
 
-Good examples:
-- 希望休
-- 希望シフト
-- 有給
-- 欠勤
+#### 5. Generation Readiness
 
-Avoid real employee/resident data.
+生成前に矛盾や不足条件を確認できることを見せます。
 
-#### 6. 作成前チェック / Generation Readiness
-This is one of the most useful UWMS utilities to demo.
+**伝えたいこと:**
+> 生成してから失敗するのではなく、作成前に重要な矛盾を確認できます。
 
-Show:
-- ready / blocked state
-- meaningful business validation
-- exact contradiction when available
+#### 6. Candidate Generation / Review — メイン画面
 
-Key portfolio message:
-> The system detects incompatible HARD rules before generation rather than silently guessing precedence.
+ポートフォリオの中心となる画面です。
 
-#### 7. Candidate Generation
-Keep this short.
+見せたい内容:
+- 勤務表グリッド
+- シフト表示
+- Candidate状態
+- 夜勤 / 明け
+- 公休・休暇などの区別
 
-Show:
-- explicit Generate action
-- transition to the newly created Candidate
+READMEのHero画像候補は、この画面を優先します。
 
-#### 8. Candidate Review — HERO SCREEN
-This should be the main portfolio screenshot.
+#### 7. 人員不足 / Diagnostics
 
-Show:
-- roster grid
-- worker hierarchy
-- shift semantic colors
-- Night / 明
-- Public-Off / leave where available
-- Candidate state
+どの日・どのシフト・どの職種で不足しているかを確認できる画面を見せます。
 
-This screenshot should become the README hero image after anonymization.
+**伝えたいこと:**
+> HARD制約を破って不足を隠すのではなく、不足を業務上の事実として表示します。
 
-#### 9. Staffing Shortages / 人員不足
-This is another strong utility showcase.
+#### 8. Candidate Correction
 
-Show:
-- shortage summary
-- affected dates
-- by-date operational grouping
-- Shift + Profession + shortage count
-- expandable detail where available
+管理者が最終判断を行えることを示します。
 
-Key portfolio message:
-> UWMS explains where staffing demand is not satisfied instead of hiding shortage behind illegal assignments.
+実際に現在サポートされている操作だけを見せ、ポートフォリオ用の架空操作は作りません。
 
-#### 10. Candidate Diagnostics / Explanation
-If the current build exposes explanation/diagnostic evidence, show it briefly.
+#### 9. Publication
 
-Only display evidence the backend actually supports. Do not invent causal explanations for the demo.
+Candidateから正式な勤務表へ移るライフサイクルを短く見せます。
 
-#### 11. Interactive Correction
-Show manager control after optimization.
-
-Target evidence:
-- open correction grid
-- modify assignment with the current supported interaction
-- preserve manager as final decision maker
-
-#### 12. Publication
-Show the transition from Candidate to official schedule using the existing publication lifecycle.
-
-Do not present publication as a simple overwrite.
+単純な「保存」ではなく、正式公開という業務境界であることが伝われば十分です。
 
 ---
 
-## Track B — Staff Experience / My Schedule
+### B. スタッフ側 — My Schedule
 
-**Status: wait for current My Schedule work to finish before recording or claiming completion.**
+My ScheduleはRelease 1.0の正式な紹介対象です。
 
-The final staff demo should focus on clarity and usefulness, not backend terminology.
+見せたい内容:
+- 月表示
+- 公開済み勤務表
+- 選択日の詳細
+- 夜勤 → 明けが自然に確認できる場合はその表示
 
-### 1. Current Effective Published Schedule
-Show the staff member's current official schedule.
+スタッフ向け機能についても、**実際に受入確認済みのものだけを紹介**します。
 
-### 2. Monthly View
-This should be the default hero view for Staff.
-
-Show:
-- calendar month
-- shift indicators
-- Public-Off / leave distinction where implemented
-- clear selected day
-
-### 3. Weekly View
-Show it briefly as a secondary viewing mode.
-
-### 4. Selected-Day Detail
-Show:
-- shift
-- time
-- Facility
-- official/published state where appropriate
-
-### 5. Night → 明
-Demonstrate that an overnight assignment is visually understandable as one continued work event rather than two unrelated shifts.
-
-### 6. 勤務希望・休暇 Utilities
-After implemented/accepted, show the actual staff-facing entry points available in the build.
-
-Possible categories include:
-- 希望シフト
-- 希望休
-- 有給申請
-- 申請状況
-
-Only show functions that are actually implemented in the final portfolio build.
-
-### 7. Shift Swap
-If the existing staff UI exposes an eligible shift-swap flow in the final demo build, include one short example.
-
-Key portfolio message:
-> Staff actions do not directly rewrite the official roster; the official lifecycle remains controlled.
+Shift Swapは、現在のリポジトリで正式な実装・受入確認が証明できるまではRelease 1.0の紹介対象に含めません。
 
 ---
 
-## Utility Showcase Matrix
+## スクリーンショット構成
 
-Before recording, verify each utility against the final acceptance build.
+最終的には**5〜7枚程度**に絞ります。
 
-| Utility | Target demo | Record now? |
-| --- | --- | --- |
-| Setup / Organization / Facility | Administration capability | Yes, if current UI remains accepted |
-| Workforce Member management | Add/update/activate/deactivate | Yes |
-| CSV workforce import | Bulk onboarding utility | Optional short clip |
-| Active Facility selection | Operational context | Optional |
-| Setup progress | Customer onboarding/resumability | Optional |
-| Scheduling Terms | Worker contract/rule authority | Yes |
-| 勤務希望・休暇 | Period-specific planning facts | Yes |
-| Generation Readiness | Pre-generation validation | **Yes — important** |
-| Candidate generation | Create candidate | Yes |
-| Candidate Review | Roster review | **Yes — hero** |
-| Staffing shortage analysis | Operational diagnostic | **Yes — important** |
-| Correction | Human decision workflow | **Yes** |
-| Publication | Official lifecycle | **Yes** |
-| Administrative audit | Traceable admin operations | Optional technical clip |
-| My Schedule | Staff official schedule | **After completion** |
-| Staff self-service utilities | Requests / status | Only after implementation proof |
-| Shift swap | Staff contextual workflow | If present in final accepted build |
+優先順位:
+
+1. **Hero:** Candidate Review / 勤務表
+2. Planning Workspace
+3. Generation Readiness
+4. 人員不足 / Diagnostics
+5. Candidate Correction または Publication
+6. **My Schedule — 月表示**
+7. 必要なら Workforce / Scheduling Terms
+
+同じ内容の画面を何枚も掲載せず、それぞれ役割が異なる画面を選びます。
 
 ---
 
-## Screenshot Set for Release 1.0
+## 短いデモ動画
 
-Target 6–8 screenshots maximum.
+目標: **60〜90秒**
 
-Recommended:
+最長でも2分以内にします。
 
-1. **Hero:** Candidate Review — 勤務表
-2. Staffing shortages / 人員不足
-3. Planning Workspace / workflow
-4. 勤務希望・休暇
-5. Workforce / Scheduling Terms
-6. **My Schedule — monthly view** (after completion)
-7. My Schedule — selected-day detail or request utility
-8. Optional architecture diagram
+```text
+0:00–0:05  UWMS / Planningを表示
+0:05–0:15  必要人数・勤務条件・Readiness
+0:15–0:35  Candidate Generation / Review
+0:35–0:50  不足確認 / Correction
+0:50–1:00  Publication
+1:00–1:20  My Schedule
+1:20–1:30  技術スタック / GitHub
+```
 
-Do not overload the README with every screen.
-
----
-
-## Video Structure
-
-Recommended final video length: **3–5 minutes**.
-
-### 0:00–0:25 — Problem / Product
-Explain UWMS in one sentence.
-
-### 0:25–1:30 — Planning Inputs
-必要人数 → Workforce → Scheduling Terms → Requests / Leave.
-
-### 1:30–2:00 — Readiness + Generate
-Show pre-check and candidate creation.
-
-### 2:00–3:05 — Candidate Review
-Roster + shortages + correction.
-
-### 3:05–3:30 — Publication
-Show official lifecycle.
-
-### 3:30–4:30 — My Schedule
-After completion: month view, selected-day detail, staff utilities.
-
-### 4:30–5:00 — Architecture / Developer Scope
-Show Java/Spring/PostgreSQL/React architecture and explain end-to-end responsibility.
+60秒程度で十分に伝わる場合は、無理に90秒へ伸ばしません。
 
 ---
 
-## Visual Rules
+## 画面撮影ルール
 
-- Use fictional/anonymized worker names.
-- No real resident/patient/customer data.
-- Hide technical UUIDs unless the screenshot is explicitly about technical evidence.
-- Keep browser chrome/account information out of screenshots where possible.
-- Prefer consistent viewport sizes.
-- Show real accepted UI; do not create portfolio-only mockups that misrepresent the product.
-- My Schedule screenshots are added only after the current implementation is accepted.
+- 架空・匿名化したデータだけを使う
+- 実在する入居者・患者・顧客・職員の情報を使わない
+- UUIDなどの技術IDは必要な場合だけ表示する
+- ブラウザのアカウント情報や個人情報を写さない
+- できるだけ同じ画面サイズで撮影する
+- 実際に受入確認したUIを使用する
+- ポートフォリオ専用の架空画面を作って製品を誤認させない
+- 未確認機能を「実装済み」と表現しない
+
+---
+
+## 公開前の最終確認
+
+公開前に以下を確認します。
+
+- READMEとスクリーンショットの説明が現在の実装と一致している
+- My Scheduleが実際の公開済み勤務表を表示している
+- 実データや秘密情報が含まれていない
+- 古い画面・古い仕様を掲載していない
+- Shift Swapなど未確認の機能を完成済みとして掲載していない
+- 動画・画像にローカルパス、アカウント情報、トークン等が写っていない
+
+詳細な安全確認は [../SECURITY_REVIEW_CHECKLIST.md](../SECURITY_REVIEW_CHECKLIST.md) を使用します。

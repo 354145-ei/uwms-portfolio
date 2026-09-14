@@ -1,41 +1,180 @@
-# Engineering Decisions
+# 設計上の判断
 
-This page highlights decisions that make UWMS more than a CRUD portfolio.
+このページでは、UWMSを単純なCRUDアプリではなく、業務システムとして設計するうえで重視した判断をまとめています。
 
-## 1. Coverage is a minimum, not an exact headcount
+---
 
-If required staffing is 3:
+## 1. 必要人数は「最低人数」として扱う
 
-- 2 = shortage
-- 3 = satisfied
-- 4 = valid surplus
+必要人数が3名の場合:
 
-A legal surplus is different from a domain violation.
+- 2名 → 1名不足
+- 3名 → 充足
+- 4名 → 有効な余剰
 
-## 2. Workforce Member is not the same as Login Identity
+必要人数以上の合法な配置までエラーにすると、現実の勤務表運用を不必要に制限します。
 
-A worker can participate in scheduling without having an application account. This allows managers to schedule employees who never use staff self-service. Login identity is linked only when application access is required.
+そのためUWMSでは、**不足と余剰を同じ意味として扱わない**ようにしています。
 
-## 3. UUID for internal identity; business code for humans
+---
 
-Internal relationships should remain stable when human-readable codes change. UWMS therefore separates immutable system identity from business identifiers and display names.
+## 2. Workforce MemberとLogin Identityを分離する
 
-## 4. HARD constraints must not be relaxed to hide shortages
+勤務表に登場する職員が、必ずしもUWMSへログインするとは限りません。
 
-If staffing demand cannot be satisfied legally, the product should preserve the rule and expose the shortage instead of creating an invalid roster that merely appears complete.
+管理者だけが勤務表を作成し、一部の職員だけがMy Scheduleを利用するケースも考えられます。
 
-## 5. Night D → 明 D+1 is one cross-date assignment
+そのため:
 
-`明` is not a second independent Shift Template. It is a continuation/reserved next-day state from the previous Night assignment.
+```text
+Workforce Member = 業務上の職員
+Login Identity   = アプリケーションへログインする主体
+```
 
-## 6. Long-lived worker conditions and one-off requests are separate
+として分離し、必要な場合だけ関連付けます。
 
-Recurring Scheduling Terms such as weekday eligibility belong to long-lived worker conditions. Date-specific requests such as 希望休 / 希望シフト belong to the planning/request lifecycle.
+---
 
-## 7. Candidate and Publication are lifecycle concepts
+## 3. 内部IDと業務コードを分離する
 
-A generated Candidate is not the final official roster. The manager remains the final decision-maker, while Publication represents the official lifecycle boundary.
+人が扱う職員コードや表示名は、業務上変更される可能性があります。
 
-## 8. Historical integrity matters
+一方、システム内部の参照は安定している必要があります。
 
-Past Candidates and Publications should not silently change only because current worker settings have changed. The system therefore treats retained evidence and current configuration as different concerns.
+そのため、内部ではUUIDなどの安定した識別子を利用し、人が扱う業務コードとは別に管理します。
+
+---
+
+## 4. HARD制約を「不足解消」のために勝手に緩和しない
+
+必要人数を満たせない場合、ルールを破って無理に勤務を割り当てれば、画面上は「不足なし」に見せることができます。
+
+しかし、それでは勤務表として正しくありません。
+
+UWMSでは、守るべき制約を維持し、満たせない必要人数は**不足として明示する**ことを優先します。
+
+---
+
+## 5. 計画上限と法令・コンプライアンス上限を同じ意味にしない
+
+「最大28時間働ける」という条件があっても、それが「通常28時間まで計画してよい」という意味とは限りません。
+
+たとえば通常の計画対象が24時間で、28時間が法令・コンプライアンス上の上限である場合、残り4時間は自動生成が積極的に使う余力ではありません。
+
+UWMSでは、**通常の計画目標 / 計画上限 / コンプライアンス上限**を同じ概念として扱わない設計を重視しています。
+
+---
+
+## 6. 夜勤 D → 明 D+1 は1つの勤務
+
+夜勤は日付をまたいで続く勤務です。
+
+```text
+10/01 夜勤
+10/02 明
+```
+
+翌日の「明」を独立した2つ目のShift Templateとして扱うと、勤務日数・夜勤回数・連続勤務などの計算が崩れる可能性があります。
+
+そのため「明」は、前日の夜勤から続く状態として扱います。
+
+---
+
+## 7. 長期的な勤務条件と一時的な申請を分ける
+
+たとえば:
+
+**長期条件**
+- 勤務可能曜日
+- 祝日勤務可否
+- 夜勤可否
+- 週所定勤務日数
+
+**一時的な申請**
+- 希望休
+- 希望シフト
+- 有給
+- 欠勤
+
+これらを同じデータとして扱うと、恒常的な契約条件と特定日の希望の意味が混ざります。
+
+UWMSでは別のライフサイクルとして扱います。
+
+---
+
+## 8. CandidateとPublicationを分ける
+
+自動生成された勤務表候補は、まだ正式な勤務表ではありません。
+
+```text
+Candidate
+   ↓
+Review / Correction
+   ↓
+Publication
+```
+
+Candidateは検討・修正可能な候補、Publicationは正式に公開された勤務表として意味を分けます。
+
+最終判断を人に残すための重要な境界です。
+
+---
+
+## 9. 公開済み勤務表を単純に上書きしない
+
+正式な勤務表を後から変更する場合でも、過去の状態を完全に消して現在値だけ残すと、いつ何が正式だったのか追えなくなります。
+
+そのためUWMSでは、Publicationを履歴・改訂として扱う考え方を採用しています。
+
+---
+
+## 10. 過去のCandidate / Publicationを現在設定だけで再評価しない
+
+職員の勤務条件やShift Templateは将来変更される可能性があります。
+
+過去のCandidateやPublicationを現在の設定だけから再構築すると、当時の判断と異なる結果になる危険があります。
+
+そこで、勤務表作成時に使った重要な判断材料を保持し、**現在の設定と過去の判断根拠を別のものとして扱う**ことを重視しています。
+
+---
+
+## 11. 重要な検証を画面だけに任せない
+
+フロントエンドで操作を制限しても、APIを直接呼び出せればルールを迂回できる可能性があります。
+
+そのため、認可や重要な勤務制約はバックエンド側でも確認します。
+
+UIの事前チェックはユーザー体験のため、バックエンド検証は業務整合性のため、と役割を分けています。
+
+---
+
+## 12. 期間境界で勤務ルールをリセットしない
+
+月単位で勤務表を作る場合でも、実際の勤務は月末でリセットされません。
+
+たとえば:
+
+- 前月末から続く連続勤務
+- 前月の夜勤から翌月1日の「明」
+- 月をまたぐ月曜〜日曜の週
+
+などは、翌月のCandidate生成にも影響します。
+
+そのため、Planning Periodの境界だけで業務上の連続性を切らないことを重視しています。
+
+---
+
+## まとめ
+
+UWMSでは「画面が動くこと」だけでなく、次の点を重視しています。
+
+- 業務用語の意味を崩さない
+- 自動生成結果を人が確認できる
+- 不足を隠さない
+- 履歴を壊さない
+- 期間境界をまたいでもルールを維持する
+- 最終的な整合性をバックエンドで守る
+
+これらは、現場運用を想定した業務システムとしてUWMSを設計するうえでの中心的な判断です。
+
+英語版: [engineering-decisions_EN.md](engineering-decisions_EN.md)

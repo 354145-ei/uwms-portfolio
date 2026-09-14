@@ -1,145 +1,102 @@
-# UWMS Portfolio Demo Scenario
+# UWMS ポートフォリオ デモシナリオ
 
-Target duration: approximately 3–5 minutes.
+目標時間: **60〜90秒**  
+最長: **2分以内**
 
-The final demo should show both **product appearance** and **real operational utility**.
+目的は全画面を説明することではありません。
 
-## 0. Opening — 15 seconds
+短時間で、UWMSが「勤務条件を入力する画面」だけではなく、**計画 → 候補生成 → 確認・修正 → 公開 → スタッフ閲覧**までつながった実際のプロダクトであることを見せます。
 
-Show the UWMS title and Planning entry point.
+---
 
-Explain:
+## 0. オープニング — 5秒
 
-> UWMS is a workforce planning and scheduling system. It combines staffing demand, worker conditions, requests and leave, then generates a candidate roster for manager review.
+UWMSのロゴ / タイトルとPlanning入口を表示します。
 
-## 1. 必要人数 — 20 seconds
+表示例:
 
-Open staffing demand.
+> Workforce Management & Scheduling System
 
-Show a compact example such as:
+---
 
-- Day Shift
-  - Care Worker: 2
-  - Nurse: 1
-- Night Shift
-  - Care Worker: 1
+## 1. Planning — 10秒
 
-Key sentence:
+Planning Workspaceを短く表示し、次の中から1〜2項目だけ見せます。
 
-> Coverage is the minimum staffing requirement. Surplus can be legal; shortage is shown honestly.
+- 必要人数
+- 勤務条件
+- 勤務希望・休暇
+- Generation Readiness
 
-## 2. 対象スタッフ / 勤務条件 — 25 seconds
+すべての入力項目を説明しません。
 
-Show worker selection and representative Scheduling Terms.
+---
 
-Point out:
-- weekday eligibility
-- holiday eligibility
-- Night eligibility
-- Profession
+## 2. Candidate Generation / Review — 20秒
 
-Key sentence:
+Generateを実行するか、準備済みCandidateを開きます。
 
-> Long-term worker conditions are separated from one-off requests.
+Candidate Reviewでは、次の要素を中心に見せます。
 
-## 3. 勤務希望・休暇 — 25 seconds
+- 勤務表グリッド
+- シフト表示
+- Candidate状態
+- 夜勤 / 明け（デモデータに自然に含まれる場合）
 
-Show examples of:
-- 希望休
-- 希望シフト
-- 有給 / 欠勤
+**Candidate Reviewを管理者側のメイン画面として扱います。**
 
-Key sentence:
+---
 
-> Approved planning facts become authoritative input to the scheduling process.
+## 3. 人員不足 / Correction — 10〜15秒
 
-## 4. 作成前チェック — 25 seconds
+人員不足やDiagnosticsを確認し、その後Candidate Correctionを短く見せます。
 
-Show Generation Readiness.
+伝えたいメッセージ:
 
-Key sentence:
+> UWMSはHARD制約を破って不足を隠さず、不足を明示したうえで管理者に最終判断を残します。
 
-> UWMS detects incompatible hard rules before generation instead of silently choosing which rule to ignore.
+---
 
-## 5. Candidate Generation — 20 seconds
+## 4. Publication — 5〜10秒
 
-Generate a Candidate using prepared fictional acceptance data.
+Candidateを正式な勤務表として公開する流れ、または現在のPublished状態を表示します。
 
-Keep this part short and predictable.
+Publicationが単純な上書き保存ではなく、正式な業務上の境界であることが伝われば十分です。
 
-## 6. Candidate Review — 50 seconds
+---
 
-This is the main demo moment.
+## 5. My Schedule — 15〜20秒
 
-Show:
-- roster
-- shift colors
-- Night / 明
-- Public-Off / leave indicators where available
-- Candidate state
-- Staffing shortages
-- correction entry point
+スタッフ側へ切り替え、次を見せます。
 
-Key sentence:
+- My Scheduleの月表示
+- 代表的な1日の詳細
+- 公開済み勤務表であることがわかる状態
+- 夜勤 → 明け（自然なデモデータがある場合のみ）
 
-> Generation is not the final decision. The manager reviews, diagnoses and corrects the Candidate.
+Release 1.0では、正式に受入確認済みのスタッフ機能だけを紹介します。
 
-## 7. Staffing Shortage Utility — 30 seconds
+**Shift Swapは、現在の実装と受入結果が正式に確認できるまでは動画に含めません。**
 
-Open 人員不足.
+---
 
-Show:
-- total shortage
-- affected dates
-- shift
-- profession
-- shortage count
-- expandable detail where supported
+## 6. クロージング — 5秒
 
-Key sentence:
+ポートフォリオ / GitHub / 技術スタックを表示します。
 
-> UWMS does not hide unmet demand by violating hard constraints.
+表示例:
 
-## 8. Correction — 30 seconds
+> Java 21 · Spring Boot · PostgreSQL · React · TypeScript · Timefold
 
-Open the supported correction experience and change one assignment.
+---
 
-Key sentence:
+## 撮影ルール
 
-> Optimization assists the manager; it does not replace the manager's final decision.
-
-## 9. Publication — 20 seconds
-
-Show the existing publication action/lifecycle.
-
-Key sentence:
-
-> The official roster is published through a separate lifecycle instead of simply overwriting the generated Candidate.
-
-## 10. My Schedule — after current implementation is complete — 45 seconds
-
-Do not record this section until the current My Schedule implementation passes acceptance.
-
-Target sequence:
-
-1. Login/view as Staff
-2. Open My Schedule
-3. Show month view
-4. Select one work day
-5. Show selected-day detail
-6. Show a Night → 明 example
-7. Show Public-Off / leave distinction where implemented
-8. Show the actual available staff utilities / request entry points
-9. Optionally show shift swap if present and accepted in the final build
-
-Key sentence:
-
-> Staff see the current effective official schedule; self-service actions do not directly rewrite the published roster.
-
-## 11. Closing — 15 seconds
-
-Show the architecture diagram / GitHub README.
-
-Closing message:
-
-> I designed and implemented the project end-to-end: requirements, domain model, backend, database, REST API, frontend, scheduling rules, tests, UX and acceptance.
+- 現在の受入確認済み実装だけを使用する
+- 架空・匿名化したデータを使う
+- 秘密情報や実在する個人情報を映さない
+- ポートフォリオ用に製品と異なる架空画面を作らない
+- ブラウザのアカウント情報や不要なローカルパスを映さない
+- 長い説明より、自然で短い操作を優先する
+- ナレーションは必須ではない
+- 60秒程度で十分なら、無理に90秒へ伸ばさない
